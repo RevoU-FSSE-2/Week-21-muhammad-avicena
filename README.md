@@ -57,7 +57,7 @@ You will need a github account to clone this repository, make sure you're connec
 
 ## SQLALCHEMY DATABASE USING SUPABASE⚙️
 
-![database](assets-github/database.png.png)
+![database](assets-github/database.png)
 
 I have successfully connected with Open-Source database named Supabase, it's super easy to use !
 
