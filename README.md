@@ -45,8 +45,6 @@ You will need a github account to clone this repository, make sure you're connec
 
 ## AVAILABLE API 📰
 
-**Endpoint :** [https://us-central1-revou-fullstack.cloudfunctions.net/week_17_avicena](https://us-central1-revou-fullstack.cloudfunctions.net/week_17_avicena)
-
 | Name                 | HTTP Method | Endpoint             | Requirements                                                                            |
 | -------------------- | ----------- | -------------------- | --------------------------------------------------------------------------------------- |
 | **Login User**       | `POST`      | /auth/login          | Request Body: `username: string, password: string`                                      |
