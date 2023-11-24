@@ -1,7 +1,6 @@
 from core.user.constants import UserRole
 from flask import Blueprint, request
 from marshmallow import Schema, fields, ValidationError, validate, validates
-from datetime import datetime, timedelta
 from core.auth.services import AuthService
 from app.depedency_injection import injector
 
@@ -10,14 +9,9 @@ auth_service = injector.get(AuthService)
 
 class UserRegistrationSchema(Schema):
     username = fields.String(required=True, validate=validate.Length(min=3))
-    email = fields.Email(required=True)
     password = fields.String(required=True, validate=validate.Length(min=5), load_only=True)
+    bio = fields.String(required=False, validate=validate.Length(max=255))
     role = fields.Enum(UserRole, required=True)
-
-    @validates("email")
-    def validate_email(self, value):
-        if not value.endswith("gmail.com"):
-            raise ValidationError("You need to use gmail.com email.")
 
 @auth_blueprint.route("/registration", methods=["POST"])
 def register():
@@ -29,7 +23,7 @@ def register():
         return {"error": err.messages}, 400
     
     return schema.dump(auth_service.register(
-        data['username'], data['password'], data['email'], data['role']
+        data['username'], data['password'], data['bio'], data['role']
     ))
 
 

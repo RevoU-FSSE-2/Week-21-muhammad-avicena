@@ -1,5 +1,5 @@
-from flask import Blueprint, request 
-from app.auth.utils import decode_jwt, user_required
+from flask import Blueprint
+from app.auth.utils import user_required
 from core.user.services import UserService
 from app.depedency_injection import injector
 
@@ -17,7 +17,7 @@ def get_user(user_id):
     return {
         'id': user.id,
         'username': user.username,
-        'email': user.email,
+        'role': user.role.value
     }
     
 

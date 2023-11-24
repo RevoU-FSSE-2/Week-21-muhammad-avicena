@@ -1,76 +1,44 @@
 from core.user.constants import UserRole
-import jwt, os
 from flask import request
+import jwt, os
 
-def decode_jwt(token):   
+def decode_jwt(token):
     try:
-        payload = jwt.decode(token, os.getenv('SECRET_KEY'), algorithms='HS256')
-        return payload
+        return jwt.decode(token, os.getenv('SECRET_KEY'), algorithms='HS256')
     except jwt.ExpiredSignatureError:
         print("Expired signature error")
         return None
     except jwt.InvalidTokenError:
         print("Invalid token error")
         return None
-    
 
-def admin_required(fn):
-    def wrapper(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        if not token:
-            return {"error": "Token is not valid"}, 401
-        
-        try:
-            decoded_token = jwt.decode(token, os.getenv('SECRET_KEY'), algorithms="HS256")
-            user_id = decoded_token.get("user_id")
+def role_required(required_role):
+    def decorator(fn):
+        def wrapper(*args, **kwargs):
+            auth_header = request.headers.get('Authorization')
+            if not auth_header:
+                return {"error": "Token is missing"}, 401
+
+            parts = auth_header.split()
+            if len(parts) != 2 or parts[0].lower() != 'bearer':
+                return {"error": "Token is not valid"}, 401
+
+            token = parts[1]
+
+            decoded_token = decode_jwt(token)
+            if decoded_token is None:
+                return {"error": "Token is not valid"}, 401
+
             user_role = decoded_token.get("role")
-            if user_role == UserRole.ADMIN.value:
-                return fn(user_id, *args, **kwargs)
+            if user_role == required_role:
+                return fn(decoded_token.get("user_id"), *args, **kwargs)
+            elif required_role == UserRole.GUESS.value and not user_role:
+                return fn(None, *args, **kwargs)
             else:
-                return {"error": "Admin access is required"}, 403
-        except jwt.ExpiredSignatureError:
-            return {"error": "Token has expired"}, 401
-        except jwt.InvalidTokenError:
-            return {"error": "Token is not valid"}, 401
-    return wrapper
+                return {"error": f"{required_role.capitalize()} access is required"}, 403
+        return wrapper
+    return decorator
 
-
-def user_required(fn):
-    def wrapper(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        if not token:
-            return {"error": "Token is not valid"}, 401
-        
-        try:
-            decoded_token = jwt.decode(token, os.getenv('SECRET_KEY'), algorithms="HS256")
-            user_id = decoded_token.get("user_id")
-            user_role = decoded_token.get("role")
-            if user_role == UserRole.USER.value:
-                return fn(user_id, *args, **kwargs)
-            else:
-                return {"error": "Member access is required"}, 403
-        except jwt.ExpiredSignatureError:
-            return {"error": "Token has expired"}, 401
-        except jwt.InvalidTokenError:
-            return {"error": "Token is not valid"}, 401
-    return wrapper
-
-
-def guess_required(fn):
-    def wrapper(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        if not token:
-            return {"error": "Token is not valid"}, 401
-        
-        try:
-            decoded_token = jwt.decode(token, os.getenv('SECRET_KEY'), algorithms="HS256")
-            user_id = decoded_token.get("user_id")
-            if user_id:
-                return fn(user_id, *args, **kwargs)
-            else:
-                return {"error": "Guess access is required"}, 403
-        except jwt.ExpiredSignatureError:
-            return {"error": "Token has expired"}, 401
-        except jwt.InvalidTokenError:
-            return {"error": "Token is not valid"}, 401
-    return wrapper
+admin_required = role_required(UserRole.ADMIN.value)
+user_required = role_required(UserRole.USER.value)
+guess_required = role_required(UserRole.GUESS.value)
