@@ -45,13 +45,13 @@ You will need a github account to clone this repository, make sure you're connec
 
 ## AVAILABLE API 📰
 
-| Name                 | HTTP Method | Endpoint             | Requirements                                                                            |
-| -------------------- | ----------- | -------------------- | --------------------------------------------------------------------------------------- |
-| **Login User**       | `POST`      | /auth/login          | Request Body: `username: string, password: string`                                      |
-| **Register User**    | `POST`      | /auth/registration   | Request Body: `username: string, password: string`                                      |
-| **Get User Profile** | `GET`       | /user                | Request Headers: `Bearer Token`                                                         |
-| **Post a Tweet**     | `POST`      | /tweet               | Request Headers: `Bearer Token`, Request Body: `tweet: string`                          |
-| **Following**        | `POST`      | /api/v1/participants | Request Headers: `Bearer Token`, Request Body: `user_id_to_follow: user_id_to_unfollow` |
+| Name                 | HTTP Method | Endpoint           | Requirements                                                                            |
+| -------------------- | ----------- | ------------------ | --------------------------------------------------------------------------------------- |
+| **Login User**       | `POST`      | /auth/login        | Request Body: `username: string, password: string`                                      |
+| **Register User**    | `POST`      | /auth/registration | Request Body: `username: string, password: string`                                      |
+| **Get User Profile** | `GET`       | /user              | Request Headers: `Bearer Token`                                                         |
+| **Post a Tweet**     | `POST`      | /tweet             | Request Headers: `Bearer Token`, Request Body: `tweet: string`                          |
+| **Following**        | `POST`      | /following         | Request Headers: `Bearer Token`, Request Body: `user_id_to_follow: user_id_to_unfollow` |
 
 ## SQLALCHEMY DATABASE USING SUPABASE⚙️
 
