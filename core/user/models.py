@@ -6,6 +6,6 @@ from core.user.constants import UserRole
 class UserDomain:
     id: int
     username: str
-    email: str
     password: str
     role: UserRole
+    bio: str

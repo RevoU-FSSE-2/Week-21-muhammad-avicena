@@ -13,12 +13,12 @@ class AuthService():
         self.user_accessor = user_accessor
         self.hashing_provider = hashing_provider
 
-    def register(self, username: str, password: str, email:str, role: UserRole) -> UserDomain:
+    def register(self, username: str, password: str, bio:str, role: UserRole) -> UserDomain:
         hashed_password = self.hashing_provider.generate(password)
         user = self.user_accessor.create_user(
             username,
             hashed_password,
-            email,
+            bio,
             role
         )   
         return user
@@ -40,12 +40,9 @@ class AuthService():
             'user_id': user.id,
             'username': user.username,
             'role': user.role.value,
-            'exp': datetime.utcnow() + timedelta(minutes=10)
+            'exp': datetime.utcnow() + timedelta(minutes=30)
         }, os.getenv('SECRET_KEY'), algorithm='HS256')    
         
         return {
-            'id': user.id,
-            'username': user.username,
-            'email': user.email,
             'token': token
         }

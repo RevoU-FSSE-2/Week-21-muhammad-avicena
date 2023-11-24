@@ -5,7 +5,7 @@ from typing import Optional
 class IUserAccessor(ABC):
 
     @abstractmethod
-    def create_user(self, username: str, password: str, email: str, role: str) -> UserDomain:
+    def create_user(self, username: str, password: str, bio: str, role: str) -> UserDomain:
         raise NotImplementedError
     
     @abstractmethod
