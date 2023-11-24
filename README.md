@@ -26,7 +26,7 @@ You will need a github account to clone this repository, make sure you're connec
 ```bash
 # Clone this repository or simply fork it.
 
-- git clone https://github.com/RevoU-FSSE-2/week-17-muhammad-avicena.git
+- git clone https://github.com/RevoU-FSSE-2/week-21-muhammad-avicena.git
 
 # Install depedencies
 
