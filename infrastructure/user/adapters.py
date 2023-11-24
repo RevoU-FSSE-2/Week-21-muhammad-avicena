@@ -7,8 +7,8 @@ from typing import Optional
 
 class UserAccessor(IUserAccessor):
     
-    def create_user(self, username: str, hashed_password: str, email: str, role:str) -> UserDomain:
-        new_user = User(username=username, email=email, password=hashed_password, role=role)
+    def create_user(self, username: str, hashed_password: str, bio: str, role:str) -> UserDomain:
+        new_user = User(username=username, bio=bio, password=hashed_password, role=role)
         db.session.add(new_user)
         db.session.commit()
 
